@@ -4,7 +4,16 @@
     let x = "x";
     let y = "y";
     let z = "z";
-    let allNodes = [x, y, z]
+
+    let a = "a";
+    let b = "b";
+    let c = "c";
+    let d = "d";
+    let e = "e";
+    let f = "f";
+    let g = "g";
+    let h = "h";
+    let allNodes = [a,b,c,d,e,f,g,h];
 
     function Connection(from, to, cost) {
       return {from, to, cost};
@@ -63,22 +72,22 @@
       return Node(node.self, newTable);
     }
 
-    function calculateDVTables(nodes) {
+    function simulateDVTableUpdates(nodes) {
       let sampleNode = nodes[0];
       let i = 1;
-      console.log("Nodes at step " + i + ":");
+      console.log("Initial node values:");
       console.dir(nodes);
 
       while(!nodes.reduce((previousResult, curNode) => previousResult && isEqual(sampleNode, curNode), true)) {
-        let newNodes = nodes.map((node) => {
+        nodes = nodes.map((node) => {
           let newNode = {...node};
           nodes.forEach((updateNode, i) => {
             newNode = updateTable(newNode, updateNode);
           });
           return newNode;
         });
-        nodes = newNodes;
-        sampleNode = newNodes[0];
+
+        sampleNode = nodes[0];
         i++;
         console.log("Nodes at step " + i + ":");
         console.dir(nodes);
@@ -88,12 +97,18 @@
     }
 
     let nodes = [
-      Node(x, [Connection(x,x,0), Connection(x,y,2), Connection(x,z,7)]),
-      Node(y, [Connection(y,x,2), Connection(y,y,0), Connection(y,z,1)]),
-      Node(z, [Connection(z,x,7), Connection(z,y,1), Connection(z,z,0)])
+      Node(a, [Connection(a,a,0), Connection(a,b,14), Connection(a,c,2)]),
+      Node(b, [Connection(b,b,0), Connection(b,a,14), Connection(b,c,8), Connection(b,f,3), Connection(b,e,1)]),
+      Node(c, [Connection(c,c,0), Connection(c,a,2), Connection(c,b,8), Connection(c,g,1)]),
+      Node(d, [Connection(d,d,0), Connection(d,e,7), Connection(d,f,10)]),
+      Node(e, [Connection(e,e,0), Connection(e,d,7), Connection(e,b,1), Connection(e,f,1)]),
+      Node(f, [Connection(f,f,0), Connection(f,b,3), Connection(f,d,10), Connection(f,e,1), Connection(f,h,1), Connection(f,g,3)]),
+      Node(g, [Connection(g,g,0), Connection(g,c,1), Connection(g,f,3), Connection(g,h,5)]),
+      Node(h, [Connection(h,h,0), Connection(h,f,1), Connection(h,g,5)]),
+
     ]
 
-    nodes = calculateDVTables(nodes);
+    nodes = simulateDVTableUpdates(nodes);
     console.log("Final node tables: ");
     console.dir(nodes);
 
