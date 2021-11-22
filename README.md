@@ -1,0 +1,1 @@
+A model implementation of the Distance Vector Routing algorithm for CS 494P @ PSU 

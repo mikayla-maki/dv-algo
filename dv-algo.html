@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <script>
+    let x = "x";
+    let y = "y";
+    let z = "z";
+
+    function Connection(from, to, cost) {
+      return {from, to, cost};
+    }
+
+    function Node(self, allNodes, nodeConnections) {
+      let nodeTable = {
+      }
+      allNodes.forEach((fromNode, i) => {
+          nodeTable[fromNode] = {};
+          allNodes.forEach((toNode, i) => {
+            nodeTable[fromNode][toNode] = -1;
+          });
+      });
+
+      nodeConnections.forEach((connection, i) => {
+        nodeTable[connection["from"]][connection["to"]] = connection["cost"];
+      });
+
+      return {
+        self,
+        nodeTable,
+        updateTable: (otherNodeTable) => {
+          allNodes.forEach((fromNode, i) => {
+            allNodes.forEach((toNode, i) => {
+              //Bellman-Ford equation
+            });
+          });
+
+        },
+        isEqual: (otherNodeTable) => {
+          let result = true;
+          allNodes.forEach((fromNode, i) => {
+            allNodes.forEach((toNode, i) => {
+              result = result && (nodeTable[fromNode][toNode] === otherNodeTable[fromNode][toNode]);
+            })
+          });
+          return result;
+        }
+      }
+    }
+
+    let nodes = [
+      Node(x, [x, y, z], [Connection(x,x,0), Connection(x,y,2), Connection(x,z,7)]),
+      Node(y, [x, y, z], [Connection(y,x,2), Connection(y,y,0), Connection(y,z,1)]),
+      Node(z, [x, y, z], [Connection(z,x,1), Connection(z,y,1), Connection(z,z,0)])
+    ]
+    let sampleNode = nodes[0];
+    let i = 1;
+    console.log("Nodes at step " + i + ":");
+    console.dir(nodes);
+
+    while(!nodes.reduce((previousResult, curNode) => sampleNode.isEqual(curNode), true)) {
+      let newNodes = nodes.map((node) => {
+        let newNode = {...node};
+        nodes.forEach((updateNode, i) => {
+          newNode = newNode.updateTable(updateNode);
+        });
+        return newNode;
+      });
+
+      nodes = newNodes;
+      sampleNode = newNodes[0];
+      i++;
+      console.log("Nodes at step " + i + ":");
+      console.dir(nodes);
+    }
+    console.log("DV tables completed after " + i + " steps.");
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
